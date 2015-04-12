@@ -1,4 +1,4 @@
-package com.mycompany.chatdemo;
+package com.mycompany.spring_chatdemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -23,17 +25,14 @@ public class ClientChat extends javax.swing.JFrame {
     Thread threadReceiver;
     public static String to = "anonymous";
     public static ConnectDB connectDB;
-    public static Message message;
     public static DefaultListModel modelMessage;
-
+    public static Message message;
+    ApplicationContext context;
     public ClientChat() {
         initComponents();
         setGui();
-        try {
-            connectDB = new ConnectDB();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        context = new ClassPathXmlApplicationContext("Spring.xml");
+        connectDB = context.getBean(ConnectDB.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -187,10 +186,6 @@ public class ClientChat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void setGui() {
-        modelMessage = new DefaultListModel();
-        lbMessage.setModel(modelMessage);
-    }
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         portSource = Integer.parseInt(tbPortSource.getText());
         Receiver receiver;
@@ -200,17 +195,9 @@ public class ClientChat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConnectActionPerformed
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
-        /*try {
-         connetClient();
-         tbMessage.setText(null);
-         } catch (IOException ex) {
-         Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (SQLException ex) {
-         Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
-        message = new Message(tbUserName.getText(), to, tbMessage.getText());
+       message = new Message(tbUserName.getText(), to , tbMessage.getText());
         try {
-            portDes = Integer.parseInt(tbPortDes.getText());
+            portDes = Integer.parseInt( tbPortDes.getText());
             Sender sender = new Sender(tbIp.getText(), portDes);
             tbMessage.setText(null);
         } catch (IOException ex) {
@@ -220,24 +207,12 @@ public class ClientChat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSendActionPerformed
 
-//    public void connetClient() throws IOException, SQLException {
-//        portDes = Integer.parseInt(tbPortDes.getText());
-//        String ipServer = tbIp.getText();
-//        Socket clientSocket = new Socket(ipServer, portDes);
-//        /*PrintStream streamSending = new PrintStream(clientSocket.getOutputStream());
-//         streamSending.println(tbMessage.getText());
-//         String message = "Sender: " + tbMessage.getText();
-//         connectDB.InsertToDB(message);
-//         modelMessage.addElement(message);*/
-//        ObjectOutputStream objectMessage = new ObjectOutputStream(clientSocket.getOutputStream());
-//        Message message = new Message(tbUserName.getText(), to, tbMessage.getText());
-//        objectMessage.writeObject(message);
-//        connectDB.InsertToDB(message);
-//        modelMessage.addElement(message.getFrom().toUpperCase() + " :" + message.getMessage());
-//    }
-
+     void setGui(){
+        modelMessage = new DefaultListModel();
+        lbMessage.setModel(modelMessage);
+    }        
     public static void main(String args[]) {
-
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -254,9 +229,6 @@ public class ClientChat extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ClientChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
