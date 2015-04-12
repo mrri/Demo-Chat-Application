@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Receiver extends Thread{
-     int port;
+    int port;
     ServerSocket socketServer;
     Socket socketReceiver;
     //String message = "";
@@ -26,20 +26,10 @@ public class Receiver extends Thread{
         socketServer = new ServerSocket(port);
         while(true){
             socketReceiver = socketServer.accept();
-            /*BufferedReader bufferedMessage = new BufferedReader(new InputStreamReader(socketReceiver.getInputStream()));
-            message = bufferedMessage.readLine();
-            if(message.equals("EXIT"))
-                break;
-            else{
-                String Message = "Receiver: " + message;
-                //Storage into DB
-                ClientChat.connectDB.InsertToDB(message);
-                ClientChat.modelMessage.addElement(Message);
-            }*/
             ObjectInputStream objectMessage = new ObjectInputStream(socketReceiver.getInputStream());
             message = (Message) objectMessage.readObject();
             ClientChat.to = message.getFrom();
-            ClientChat.connectDB.InsertToDB(message);
+            ClientChat.connectDB.insertDB(message);
             if(message.getMessage().equals("EXIT"))
                 break;
             else

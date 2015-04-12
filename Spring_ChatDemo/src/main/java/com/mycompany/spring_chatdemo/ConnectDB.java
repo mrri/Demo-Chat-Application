@@ -6,39 +6,43 @@
 package com.mycompany.spring_chatdemo;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
+
 
 /**
  *
  * @author Quoc Huy Ngo
  */
 public class ConnectDB {
-    private Connection connection;
+    private DataSource dataSource;
+    Connection connection = null;
     String table = "message";
-    public ConnectDB() throws ClassNotFoundException {
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    public void insertDB(Message message) throws SQLException{
         try {
-            connect();
+            String query = "INSERT INTO " + table + " VALUES (?, ?, ?)";
+            
+            connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, message.getMessage());
+            ps.setString(2, message.getFrom());
+            ps.setString(3, message.getTo());
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(ConnectDB.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            if(connection != null)
+                connection.close();
         }
+        
     }
-    
-    void connect() throws ClassNotFoundException, SQLException{
-        Class.forName("com.mysql.jdbc.Driver");
-        String url = "jdbc:mysql://127.0.0.1:3306/chat";
-        connection = DriverManager.getConnection(url, "root", "");
-        System.err.println("Connect Success");
-    }
-    
-    public void InsertToDB(Message message) throws SQLException{
-        Statement statement = (Statement)connection.createStatement();
-        String query = "insert into " + table + " values('" + message.getMessage()
-                                                         + "','" + message.getFrom() + "','" + message.getTo() + "')";
-        statement.executeUpdate(query);
-    }
-            
 }
+

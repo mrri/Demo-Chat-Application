@@ -32,7 +32,7 @@ public class ClientChat extends javax.swing.JFrame {
         initComponents();
         setGui();
         context = new ClassPathXmlApplicationContext("Spring.xml");
-        connectDB = context.getBean(ConnectDB.class);
+        connectDB = (ConnectDB) context.getBean("connectDB");
     }
 
     @SuppressWarnings("unchecked")
@@ -208,6 +208,7 @@ public class ClientChat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSendActionPerformed
 
      void setGui(){
+        setTitle("Spring Chat Demo");
         modelMessage = new DefaultListModel();
         lbMessage.setModel(modelMessage);
     }        
