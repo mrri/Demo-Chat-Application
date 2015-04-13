@@ -21,6 +21,10 @@ public class Receiver extends Thread{
     public Receiver(int port){
         this.port = port;
     }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
     
     public void connection() throws IOException, SQLException, ClassNotFoundException{
         socketServer = new ServerSocket(port);

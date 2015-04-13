@@ -18,14 +18,22 @@ public class Sender {
 
     int port;
     String ip;
-    public Sender(String ip ,int port) throws IOException, SQLException {
+    public Sender(String ip ,int port){
         this.port = port;
         this.ip = ip;
-        connetClient();
+        //connetClient();
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
     
-      public void connetClient() throws IOException, SQLException{        
-        Socket clientSocket = new Socket(ip , port);
+    public void connetClient() throws IOException, SQLException {
+        Socket clientSocket = new Socket(ip, port);
         ObjectOutputStream objectMessage = new ObjectOutputStream(clientSocket.getOutputStream());
         //Message message = new Message(tbUserName.getText(), to , tbMessage.getText());
         objectMessage.writeObject(ClientChat.message);

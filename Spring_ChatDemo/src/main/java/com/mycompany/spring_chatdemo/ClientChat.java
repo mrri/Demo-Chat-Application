@@ -14,14 +14,14 @@ import javax.swing.DefaultListModel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- *
- * @author Quoc Huy Ngo
+/*
+ * Quoc Huy Ngo
+ * Chat Demo Spring
  */
 public class ClientChat extends javax.swing.JFrame {
 
     ServerSocket serverConnection;
-    int portDes, portSource;
+    int portDes, portSource; //port gui di, local
     Thread threadReceiver;
     public static String to = "anonymous";
     public static ConnectDB connectDB;
@@ -189,7 +189,8 @@ public class ClientChat extends javax.swing.JFrame {
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         portSource = Integer.parseInt(tbPortSource.getText());
         Receiver receiver;
-        receiver = new Receiver(portSource);
+        receiver = (Receiver) context.getBean("receiver");//new Receiver(portSource);
+        receiver.setPort(portSource);
         threadReceiver = new Thread(receiver);
         threadReceiver.start();
     }//GEN-LAST:event_btnConnectActionPerformed
@@ -197,8 +198,13 @@ public class ClientChat extends javax.swing.JFrame {
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
        message = new Message(tbUserName.getText(), to , tbMessage.getText());
         try {
-            portDes = Integer.parseInt( tbPortDes.getText());
-            Sender sender = new Sender(tbIp.getText(), portDes);
+            portDes = Integer.parseInt(tbPortDes.getText());
+            Sender sender;
+            sender = (Sender) context.getBean("sender");
+            sender.setIp(tbIp.getText());
+            sender.setPort(portDes);
+            sender.connetClient();
+            //new Sender(tbIp.getText(), portDes);
             tbMessage.setText(null);
         } catch (IOException ex) {
             Logger.getLogger(ClientChat.class.getName()).log(Level.SEVERE, null, ex);

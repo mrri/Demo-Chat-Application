@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -18,12 +19,13 @@ import javax.sql.DataSource;
  * @author Quoc Huy Ngo
  */
 public class ConnectDB {
+    @Autowired
     private DataSource dataSource;
     Connection connection = null;
     String table = "message";
-    public void setDataSource(DataSource dataSource) {
+    /*public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
+    }*/
     
     public void insertDB(Message message) throws SQLException{
         try {
