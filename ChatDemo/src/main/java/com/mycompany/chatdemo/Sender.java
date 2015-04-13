@@ -26,8 +26,7 @@ public class Sender{
         connetClient();
     }
     
-    public void connetClient() throws IOException, SQLException{
-        
+    public void connetClient() throws IOException, SQLException{       
         Socket clientSocket = new Socket(ip , port);
         ObjectOutputStream objectMessage = new ObjectOutputStream(clientSocket.getOutputStream());
         //Message message = new Message(tbUserName.getText(), to , tbMessage.getText());

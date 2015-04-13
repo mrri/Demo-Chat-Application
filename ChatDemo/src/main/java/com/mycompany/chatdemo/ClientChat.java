@@ -188,6 +188,7 @@ public class ClientChat extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     void setGui() {
+        setTitle("Chat Demo");
         modelMessage = new DefaultListModel();
         lbMessage.setModel(modelMessage);
     }

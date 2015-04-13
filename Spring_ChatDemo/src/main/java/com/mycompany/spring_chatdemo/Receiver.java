@@ -29,7 +29,6 @@ public class Receiver extends Thread{
             ObjectInputStream objectMessage = new ObjectInputStream(socketReceiver.getInputStream());
             message = (Message) objectMessage.readObject();
             ClientChat.to = message.getFrom();
-            ClientChat.connectDB.insertDB(message);
             if(message.getMessage().equals("EXIT"))
                 break;
             else

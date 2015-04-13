@@ -31,9 +31,9 @@ public class ConnectDB {
             
             connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, message.getMessage());
-            ps.setString(2, message.getFrom());
-            ps.setString(3, message.getTo());
+            ps.setString(1, message.getFrom());
+            ps.setString(2, message.getTo());
+            ps.setString(3, message.getMessage()); 
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
